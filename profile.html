@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Profile | Study Swap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee; --primary-dark: #3a56d4; --secondary: #7209b7;
+            --light: #f8f9fa; --dark: #212529; --gray: #6c757d;
+            --success: #28a745; --warning: #ffc107; --error: #dc3545;
+            --shadow: 0 8px 24px rgba(0,0,0,0.1); --radius: 14px; --transition: all 0.3s ease;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:#f4f7fb; color:var(--dark); line-height:1.6; min-height:100vh; }
+        
+        /* Header (Consistent) */
+        header { background:white; padding:15px 30px; box-shadow:var(--shadow); position:sticky; top:0; z-index:100; }
+        .nav-container { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+        .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+        .logo i { font-size:1.6rem; color:var(--primary); } .logo span { font-size:1.4rem; font-weight:700; color:var(--primary); }
+        .nav-links { display:flex; gap:20px; align-items:center; }
+        .nav-links a { text-decoration:none; color:var(--gray); font-weight:500; transition:var(--transition); }
+        .nav-links a:hover, .nav-links a.active { color:var(--primary); }
+        .btn-nav { padding:8px 16px; background:var(--primary); color:white; border-radius:8px; text-decoration:none; font-weight:500; transition:var(--transition); }
+        .btn-nav:hover { background:var(--primary-dark); }
+
+        /* Profile Layout */
+        .profile-container { max-width:1200px; margin:30px auto; padding:0 20px; }
+        .demo-banner { background:var(--warning); color:#333; text-align:center; padding:8px; font-size:0.85rem; font-weight:500; margin-bottom:20px; border-radius:8px; }
+        
+        .profile-hero {
+            background: white; padding:30px; border-radius:var(--radius); box-shadow:var(--shadow);
+            display: flex; align-items: center; gap: 25px; flex-wrap: wrap; margin-bottom: 30px;
+        }
+        .avatar-container { position: relative; width: 120px; height: 120px; }
+        .avatar-lg {
+            width: 100%; height: 100%; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: 600;
+        }
+        .avatar-edit {
+            position: absolute; bottom: 5px; right: 5px; background: white; border: 2px solid var(--primary);
+            color: var(--primary); width: 32px; height: 32px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; cursor: pointer; transition: var(--transition);
+        }
+        .avatar-edit:hover { background: var(--primary); color: white; }
+        
+        .profile-info { flex: 1; min-width: 250px; }
+        .profile-name { font-size: 1.8rem; font-weight: 600; margin-bottom: 5px; }
+        .profile-email { color: var(--gray); margin-bottom: 10px; font-size: 0.95rem; }
+        .profile-badges { display: flex; gap: 10px; flex-wrap: wrap; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500; }
+        .badge-mentor { background: #e6f4ea; color: var(--success); }
+        .badge-learner { background: #e0e7ff; color: var(--primary); }
+        .badge-verified { background: #fff3cd; color: #856404; }
+        
+        .profile-actions { display: flex; gap: 12px; margin-top: 15px; }
+        .btn { padding: 10px 20px; border-radius: 8px; font-weight: 500; cursor: pointer; border: none; transition: var(--transition); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); }
+        .btn-outline { border: 2px solid var(--gray); background: transparent; color: var(--dark); }
+        .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+        .profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
+        .card { background: white; padding: 25px; border-radius: var(--radius); box-shadow: var(--shadow); }
+        .card h3 { font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #eee; padding-bottom: 12px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; }
+        .form-control { width: 100%; padding: 12px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 0.95rem; transition: var(--transition); }
+        .form-control:focus { outline: none; border-color: var(--primary); }
+        textarea.form-control { resize: vertical; min-height: 80px; }
+        
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .tag { padding: 6px 12px; background: var(--light); border-radius: 15px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+        .tag i { cursor: pointer; color: var(--error); font-size: 0.8rem; }
+        .add-skill-input { width: 100%; padding: 8px; border: 1px dashed var(--gray); border-radius: 8px; margin-top: 8px; font-size: 0.9rem; }
+        
+        .session-item { display: flex; gap: 15px; padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+        .session-item:last-child { border-bottom: none; }
+        .session-date { background: var(--light); padding: 10px; border-radius: 8px; text-align: center; min-width: 60px; }
+        .session-date .day { font-size: 1.2rem; font-weight: 600; display: block; }
+        .session-date .month { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; }
+        .session-details h4 { margin-bottom: 4px; font-size: 1rem; }
+        .session-details p { color: var(--gray); font-size: 0.85rem; }
+        .status { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; }
+        .status-completed { background: #e6f4ea; color: var(--success); }
+        .status-upcoming { background: #e0e7ff; color: var(--primary); }
+        
+        .review-item { padding: 15px 0; border-bottom: 1px solid #f0f0f0; }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .review-author { font-weight: 500; }
+        .stars { color: var(--warning); }
+        .review-text { color: var(--gray); font-size: 0.9rem; font-style: italic; }
+        
+        .toast { position: fixed; bottom: 30px; right: 30px; padding: 15px 20px; background: var(--success); color: white; border-radius: 10px; box-shadow: var(--shadow); display: none; z-index: 200; }
+        .toast.show { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        
+        footer { text-align:center; padding:30px 20px; color:var(--gray); font-size:0.9rem; margin-top:40px; }
+        footer strong { color:var(--dark); }
+        
+        @media (max-width: 768px) {
+            .profile-hero { flex-direction: column; text-align: center; }
+            .profile-badges, .profile-actions { justify-content: center; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><i class="fas fa-exchange-alt"></i><span>Study Swap</span></a>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="profile.html" class="active">Profile</a>
+                <a href="dashboard.html#matches">Matches</a>
+                <a href="dashboard.html#sessions">Sessions</a>
+                <a href="signin.html" class="btn-nav">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="demo-banner" id="demoBanner">🔹 Demo Mode Active • Edit & Save works locally</div>
+
+    <main class="profile-container">
+        <!-- Hero Section -->
+        <section class="profile-hero">
+            <div class="avatar-container">
+                <div class="avatar-lg" id="profileAvatar">GS</div>
+                <div class="avatar-edit" title="Change Photo"><i class="fas fa-camera"></i></div>
+            </div>
+            <div class="profile-info">
+                <h1 class="profile-name" id="profileName">Loading...</h1>
+                <p class="profile-email" id="profileEmail">user@studyswap.demo</p>
+                <div class="profile-badges">
+                    <span class="badge badge-mentor"><i class="fas fa-chalkboard-teacher"></i> Mentor</span>
+                    <span class="badge badge-learner"><i class="fas fa-graduation-cap"></i> Learner</span>
+                    <span class="badge badge-verified"><i class="fas fa-check-circle"></i> Verified</span>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary" onclick="toggleEditMode()"><i class="fas fa-edit"></i> Edit Profile</button>
+                    <button class="btn btn-outline" onclick="window.history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Grid -->
+        <div class="profile-grid">
+            <!-- Bio & Skills -->
+            <div class="card" id="editCard">
+                <h3><i class="fas fa-id-card"></i> About & Skills</h3>
+                <div class="form-group">
+                    <label>Bio</label>
+                    <textarea class="form-control" id="profileBio" disabled placeholder="Tell others about your learning journey..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Skills I Teach <span style="color:var(--gray); font-weight:400;">(comma separated)</span></label>
+                    <input type="text" class="form-control" id="teachSkills" disabled placeholder="JavaScript, React, Node.js">
+                    <div class="skill-tags" id="teachTags"></div>
+                </div>
+                <div class="form-group">
+                    <label>Skills I Want to Learn <span style="color:var(--gray); font-weight:400;">(comma separated)</span></label>
+                    <input type="text" class="form-control" id="learnSkills" disabled placeholder="Python, UI/UX, AWS">
+                    <div class="skill-tags" id="learnTags"></div>
+                </div>
+                <button class="btn btn-primary" id="saveBtn" style="display:none; width:100%; margin-top:15px;" onclick="saveProfile()">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </div>
+
+            <!-- Session History -->
+            <div class="card">
+                <h3><i class="fas fa-history"></i> Session History</h3>
+                <div id="sessionList">
+                    <div style="text-align:center; color:var(--gray); padding:20px;">Loading sessions...</div>
+                </div>
+            </div>
+
+            <!-- Reviews -->
+            <div class="card">
+                <h3><i class="fas fa-star"></i> Reviews & Ratings</h3>
+                <div id="reviewList">
+                    <div style="text-align:center; color:var(--gray); padding:20px;">Loading reviews...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast" id="toast">✅ Profile updated successfully!</div>
+    <footer>
+        <p>&copy; 2026 <strong>Study Swap</strong>. Built with ❤️ by <strong>GAGANA A S</strong>, <strong>ANKITHA P N</strong> & <strong>JAHNAVI C D</strong></p>
+    </footer>
+
+    <script>
+        // ✅ DEMO USER - Always loads with sample data
+        const demoUser = {
+            name: "Gagana A S",
+            email: "gagana@studyswap.demo",
+            bio: "Passionate frontend developer looking to swap JS skills for backend knowledge. Let's build together!",
+            teach: "JavaScript, React, HTML/CSS",
+            learn: "Node.js, MongoDB, Python"
+        };
+
+        let currentUser = Object.assign({}, demoUser);
+        let isEditing = false;
+
+        // Render Initial Data
+        function renderProfile() {
+            try {
+                const nameEl = document.getElementById('profileName');
+                const emailEl = document.getElementById('profileEmail');
+                const avatarEl = document.getElementById('profileAvatar');
+                const bioEl = document.getElementById('profileBio');
+                const teachEl = document.getElementById('teachSkills');
+                const learnEl = document.getElementById('learnSkills');
+                
+                if (!nameEl) return setTimeout(renderProfile, 100);
+                
+                nameEl.textContent = currentUser.name || "Profile";
+                emailEl.textContent = currentUser.email || "user@example.com";
+                avatarEl.textContent = (currentUser.name || "U").split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+                
+                bioEl.value = currentUser.bio || '';
+                teachEl.value = currentUser.teach || '';
+                learnEl.value = currentUser.learn || '';
+                
+                renderTags('teachTags', currentUser.teach);
+                renderTags('learnTags', currentUser.learn);
+                renderSessions();
+                renderReviews();
+            } catch(e) {
+                console.error('Render error:', e);
+            }
+        }
+
+        function renderTags(containerId, skillsStr) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const skills = skillsStr ? skillsStr.split(',').map(s=>s.trim()).filter(Boolean) : [];
+            container.innerHTML = skills.map(s => `<span class="tag">${s} <i class="fas fa-times" onclick="this.parentElement.remove()"></i></span>`).join('');
+        }
+
+        function renderSessions() {
+            const sessionList = document.getElementById('sessionList');
+            if (!sessionList) return;
+            const sessions = [
+                { day: '15', month: 'Nov', title: 'React Hooks Deep Dive', partner: 'Alex K', status: 'completed', type: 'Video Call' },
+                { day: '22', month: 'Nov', title: 'Node.js API Basics', partner: 'Priya M', status: 'upcoming', type: 'Screen Share' },
+                { day: '05', month: 'Dec', title: 'UI/UX Principles', partner: 'Sam T', status: 'upcoming', type: 'Chat + Docs' }
+            ];
+            sessionList.innerHTML = sessions.map(s => `
+                <div class="session-item">
+                    <div class="session-date"><span class="day">${s.day}</span><span class="month">${s.month}</span></div>
+                    <div class="session-details">
+                        <h4>${s.title}</h4>
+                        <p>with ${s.partner} • ${s.type}</p>
+                    </div>
+                    <span class="status status-${s.status}">${s.status === 'completed' ? '✅ Completed' : '📅 Upcoming'}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderReviews() {
+            const reviewList = document.getElementById('reviewList');
+            if (!reviewList) return;
+            const reviews = [
+                { name: 'Alex K', stars: 5, text: 'Amazing mentor! Explained complex React concepts so clearly.' },
+                { name: 'Jordan L', stars: 4, text: 'Great session on JS fundamentals. Would swap again.' },
+                { name: 'Priya M', stars: 5, text: 'Patient, structured, and highly knowledgeable. Highly recommend!' }
+            ];
+            reviewList.innerHTML = reviews.map(r => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <span class="review-author">${r.name}</span>
+                        <span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span>
+                    </div>
+                    <p class="review-text">"${r.text}"</p>
+                </div>
+            `).join('');
+        }
+
+        function toggleEditMode() {
+            isEditing = !isEditing;
+            const inputs = document.querySelectorAll('.form-control');
+            const saveBtn = document.getElementById('saveBtn');
+            const heroH1 = document.querySelector('.profile-hero h1');
+            
+            if (!inputs.length || !saveBtn || !heroH1) return;
+            
+            inputs.forEach(input => {
+                input.disabled = !isEditing;
+                if(isEditing) input.style.borderColor = 'var(--primary)';
+                else input.style.borderColor = '#e1e5e9';
+            });
+            
+            saveBtn.style.display = isEditing ? 'block' : 'none';
+            heroH1.textContent = isEditing ? '✏️ Editing Profile' : currentUser.name;
+        }
+
+        function saveProfile() {
+            const bio = document.getElementById('profileBio').value.trim();
+            const teach = document.getElementById('teachSkills').value.trim();
+            const learn = document.getElementById('learnSkills').value.trim();
+            
+            if(!bio || !teach || !learn) {
+                showToast('❌ Please fill in all fields before saving.');
+                return;
+            }
+
+            currentUser.bio = bio;
+            currentUser.teach = teach;
+            currentUser.learn = learn;
+
+            toggleEditMode();
+            renderProfile();
+            showToast('✅ Profile updated successfully!');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Initialize on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderProfile);
+        } else {
+            renderProfile();
+        }
+    </script>
+</body>
+</html>

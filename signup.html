@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sign Up | Study Swap</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ===== CSS VARIABLES & RESET ===== */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #28a745;
+            --error: #dc3545;
+            --warning: #ffc107;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+            --shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.18);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* ===== HEADER ===== */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        
+        .logo-icon { font-size: 1.8rem; color: var(--primary); }
+        
+        .logo-text {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: -4px;
+            font-weight: 400;
+        }
+        
+        .back-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+        
+        .back-link:hover {
+            color: var(--secondary);
+            transform: translateX(-3px);
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+        
+        .auth-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px 35px;
+            animation: slideUp 0.4s ease;
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .auth-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+        
+        .auth-header p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+        
+        /* ===== FORM STYLES ===== */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        
+        @media (max-width: 520px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        
+        .form-group label .required {
+            color: var(--error);
+            margin-left: 3px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 13px 16px 13px 45px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--light);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.15);
+        }
+        
+        .form-control.error {
+            border-color: var(--error);
+        }
+        
+        .form-control.success {
+            border-color: var(--success);
+        }
+        
+        .form-icon {
+            position: absolute;
+            left: 16px;
+            top: 42px;
+            color: var(--gray);
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus + .form-icon,
+        .form-group:hover .form-icon {
+            color: var(--primary);
+        }
+        
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .error-message.show { display: block; }
+        
+        /* ===== PASSWORD STRENGTH ===== */
+        .password-strength {
+            margin-top: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .strength-bar {
+            height: 5px;
+            background: #e1e5e9;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.3s ease, background 0.3s ease;
+        }
+        
+        .strength-weak { background: var(--error); width: 33%; }
+        .strength-medium { background: var(--warning); width: 66%; }
+        .strength-strong { background: var(--success); width: 100%; }
+        
+        /* ===== SKILL TAGS ===== */
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .skill-tag {
+            padding: 6px 14px;
+            background: var(--light);
+            border: 2px solid #e1e5e9;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            user-select: none;
+        }
+        
+        .skill-tag:hover {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.08);
+        }
+        
+        .skill-tag.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+        
+        .skill-tag i {
+            margin-right: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .skill-input-hint {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 6px;
+            font-style: italic;
+        }
+        
+        /* ===== PASSWORD TOGGLE ===== */
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 42px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 1.1rem;
+            padding: 4px;
+            transition: var(--transition);
+        }
+        
+        .password-toggle:hover { color: var(--primary); }
+        
+        /* ===== CHECKBOX & TERMS ===== */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 25px 0;
+            font-size: 0.9rem;
+        }
+        
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+            margin-top: 3px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            color: var(--gray);
+            line-height: 1.5;
+        }
+        
+        .checkbox-group a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .checkbox-group a:hover { text-decoration: underline; }
+        
+        /* ===== SUBMIT BUTTON ===== */
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.6);
+        }
+        
+        .btn-submit:active { transform: translateY(0); }
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* ===== DIVIDER ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e1e5e9;
+        }
+        
+        .divider span { padding: 0 15px; }
+        
+        /* ===== SOCIAL SIGNUP ===== */
+        .social-signup {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .btn-social {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            background: white;
+            color: var(--dark);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .btn-social:hover {
+            border-color: var(--primary);
+            background: var(--light);
+            transform: translateY(-2px);
+        }
+        
+        .btn-social.google:hover { border-color: #db4437; color: #db4437; }
+        .btn-social.github:hover { border-color: #333; color: #333; }
+        
+        /* ===== SIGN IN LINK ===== */
+        .signin-link {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-top: 15px;
+        }
+        
+        .signin-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .signin-link a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        /* ===== ALERT MESSAGES ===== */
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .alert-error {
+            background: #fff5f5;
+            color: var(--error);
+            border: 1px solid #fed7d7;
+        }
+        
+        .alert-success {
+            background: #f0fff4;
+            color: var(--success);
+            border: 1px solid #c6f6d5;
+        }
+        
+        /* ===== FOOTER ===== */
+        footer {
+            text-align: center;
+            padding: 25px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid #e1e5e9;
+        }
+        
+        footer strong { color: var(--dark); }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 520px) {
+            .auth-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+            .navbar { padding: 0 20px; }
+            .social-signup { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ===== HEADER ===== -->
+    <header>
+        <nav class="navbar">
+            <a href="index.html" class="logo">
+                <i class="fas fa-exchange-alt logo-icon"></i>
+                <div>
+                    <div class="logo-text">Study Swap</div>
+                    <div class="logo-subtitle">Tech Skills Exchange</div>
+                </div>
+            </a>
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+        </nav>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+        <div class="auth-container">
+            <div class="auth-header">
+                <h1><i class="fas fa-user-plus"></i> Create Your Account</h1>
+                <p>Join thousands of learners swapping tech skills</p>
+            </div>
+            
+            <!-- Alert Messages -->
+            <div id="alertBox" class="alert"></div>
+            
+            <!-- Sign Up Form -->
+            <form id="signupForm" onsubmit="handleSignup(event)">
+                
+                <!-- Name Fields -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" class="form-control" placeholder="Gagana" required minlength="2">
+                        <i class="fas fa-user form-icon"></i>
+                        <div class="error-message" id="firstNameError">Please enter your first name</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" class="form-control" placeholder="A S" required minlength="2">
+                        <i class="fas fa-user form-icon"></i>
+                        <div class="error-message" id="lastNameError">Please enter your last name</div>
+                    </div>
+                </div>
+                
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" class="form-control" placeholder="you@example.com" required autocomplete="email">
+                    <i class="fas fa-envelope form-icon"></i>
+                    <div class="error-message" id="emailError">Please enter a valid email address</div>
+                </div>
+                
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required minlength="8" autocomplete="new-password">
+                    <i class="fas fa-lock form-icon"></i>
+                    <button type="button" class="password-toggle" onclick="togglePassword('password', 'toggleIcon1')">
+                        <i class="fas fa-eye" id="toggleIcon1"></i>
+                    </button>
+                    <div class="password-strength">
+                        <span id="strengthText">Password strength</span>
+                        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+                    </div>
+                    <div class="error-message" id="passwordError">Password must be at least 8 characters</div>
+                </div>
+                
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="••••••••" required autocomplete="new-password">
+                    <i class="fas fa-lock form-icon"></i>
+                    <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword', 'toggleIcon2')">
+                        <i class="fas fa-eye" id="toggleIcon2"></i>
+                    </button>
+                    <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+                </div>
+                
+                <!-- Skills You Can Teach -->
+                <div class="form-group">
+                    <label for="teachSkill"><i class="fas fa-chalkboard-teacher"></i> Skills You Can Teach <span class="required">*</span></label>
+                    <input type="text" id="teachSkill" class="form-control" placeholder="e.g., JavaScript, Python, React" style="padding-left: 16px;" required>
+                    <p class="skill-input-hint">💡 Tip: Be specific! "React Hooks" is better than just "JavaScript"</p>
+                    
+                    <p style="margin: 12px 0 8px; font-weight: 500; font-size: 0.9rem;">Popular Tech Skills:</p>
+                    <div class="skill-tags" id="teachTags">
+                        <span class="skill-tag" data-skill="JavaScript"><i class="fab fa-js"></i>JavaScript</span>
+                        <span class="skill-tag" data-skill="Python"><i class="fab fa-python"></i>Python</span>
+                        <span class="skill-tag" data-skill="React"><i class="fab fa-react"></i>React</span>
+                        <span class="skill-tag" data-skill="Node.js"><i class="fab fa-node"></i>Node.js</span>
+                        <span class="skill-tag" data-skill="UI/UX"><i class="fas fa-palette"></i>UI/UX</span>
+                        <span class="skill-tag" data-skill="SQL"><i class="fas fa-database"></i>SQL</span>
+                        <span class="skill-tag" data-skill="Git"><i class="fab fa-git-alt"></i>Git</span>
+                        <span class="skill-tag" data-skill="AWS"><i class="fab fa-aws"></i>AWS</span>
+                    </div>
+                </div>
+                
+                <!-- Skills You Want to Learn -->
+                <div class="form-group">
+                    <label for="learnSkill"><i class="fas fa-graduation-cap"></i> Skills You Want to Learn <span class="required">*</span></label>
+                    <input type="text" id="learnSkill" class="form-control" placeholder="e.g., Machine Learning, Docker, Figma" style="padding-left: 16px;" required>
+                    <p class="skill-input-hint">🎯 What do you want to master next?</p>
+                    
+                    <p style="margin: 12px 0 8px; font-weight: 500; font-size: 0.9rem;">Trending to Learn:</p>
+                    <div class="skill-tags" id="learnTags">
+                        <span class="skill-tag" data-skill="Machine Learning"><i class="fas fa-brain"></i>ML/AI</span>
+                        <span class="skill-tag" data-skill="Docker"><i class="fab fa-docker"></i>Docker</span>
+                        <span class="skill-tag" data-skill="TypeScript"><i class="fas fa-code"></i>TypeScript</span>
+                        <span class="skill-tag" data-skill="Figma"><i class="fab fa-figma"></i>Figma</span>
+                        <span class="skill-tag" data-skill="Cybersecurity"><i class="fas fa-shield-alt"></i>Security</span>
+                        <span class="skill-tag" data-skill="Data Science"><i class="fas fa-chart-line"></i>Data Science</span>
+                        <span class="skill-tag" data-skill="Flutter"><i class="fas fa-mobile-alt"></i>Flutter</span>
+                        <span class="skill-tag" data-skill="DevOps"><i class="fas fa-infinity"></i>DevOps</span>
+                    </div>
+                </div>
+                
+                <!-- Terms & Privacy -->
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms" required>
+                    <label for="terms">
+                        I agree to the <a href="#" onclick="showAlert('info', 'Terms page coming soon!')">Terms of Service</a> 
+                        and <a href="#" onclick="showAlert('info', 'Privacy Policy page coming soon!')">Privacy Policy</a>. 
+                        I'm at least 16 years old.
+                    </label>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+            
+            <!-- Divider -->
+            <div class="divider">
+                <span>or sign up with</span>
+            </div>
+            
+            <!-- Social Signup -->
+            <div class="social-signup">
+                <button class="btn-social google" onclick="socialSignup('Google')">
+                    <i class="fab fa-google"></i> Google
+                </button>
+                <button class="btn-social github" onclick="socialSignup('GitHub')">
+                    <i class="fab fa-github"></i> GitHub
+                </button>
+            </div>
+            
+            <!-- Sign In Link -->
+            <p class="signin-link">
+                Already have an account? <a href="signin.html">Sign in here</a>
+            </p>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>
+            &copy; 2026 <strong>Study Swap</strong>. Built with ❤️ by 
+            <strong>GAGANA A S</strong>, <strong>ANKITHA P N</strong> & <strong>JAHNAVI C D</strong>
+        </p>
+        <p style="margin-top: 8px; font-size: 0.85rem; opacity: 0.9;">
+            <i class="fas fa-graduation-cap"></i> Learn Together • Grow Together
+        </p>
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script>
+        // ===== PASSWORD TOGGLE =====
+        function togglePassword(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+        
+        // ===== PASSWORD STRENGTH CHECKER =====
+        document.getElementById('password').addEventListener('input', function() {
+            const pwd = this.value;
+            const strengthFill = document.getElementById('strengthFill');
+            const strengthText = document.getElementById('strengthText');
+            
+            let strength = 0;
+            if (pwd.length >= 8) strength++;
+            if (pwd.match(/[a-z]+/) && pwd.match(/[A-Z]+/)) strength++;
+            if (pwd.match(/[0-9]+/) && pwd.match(/[^a-zA-Z0-9]+/)) strength++;
+            
+            strengthFill.className = 'strength-fill';
+            if (strength === 1) {
+                strengthFill.classList.add('strength-weak');
+                strengthText.textContent = 'Weak password';
+                strengthText.style.color = 'var(--error)';
+            } else if (strength === 2) {
+                strengthFill.classList.add('strength-medium');
+                strengthText.textContent = 'Medium strength';
+                strengthText.style.color = 'var(--warning)';
+            } else if (strength === 3) {
+                strengthFill.classList.add('strength-strong');
+                strengthText.textContent = 'Strong password';
+                strengthText.style.color = 'var(--success)';
+            } else {
+                strengthFill.style.width = '0%';
+                strengthText.textContent = 'Password strength';
+                strengthText.style.color = 'var(--gray)';
+            }
+        });
+        
+        // ===== SKILL TAG SELECTION =====
+        document.querySelectorAll('.skill-tags').forEach(container => {
+            container.addEventListener('click', function(e) {
+                if (e.target.classList.contains('skill-tag')) {
+                    const tag = e.target;
+                    const inputId = container.id === 'teachTags' ? 'teachSkill' : 'learnSkill';
+                    const input = document.getElementById(inputId);
+                    
+                    tag.classList.toggle('selected');
+                    
+                    // Update input value with selected skills
+                    const selectedSkills = Array.from(container.querySelectorAll('.skill-tag.selected'))
+                        .map(t => t.dataset.skill);
+                    
+                    if (selectedSkills.length > 0) {
+                        input.value = selectedSkills.join(', ');
+                    } else {
+                        input.value = '';
+                    }
+                }
+            });
+        });
+        
+        // ===== ALERT FUNCTION =====
+        function showAlert(type, message) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = 'alert';
+            
+            if (type === 'error') {
+                alertBox.classList.add('alert-error');
+            } else if (type === 'success') {
+                alertBox.classList.add('alert-success');
+            } else if (type === 'info') {
+                alertBox.classList.add('alert-success'); // Using success style for info
+            }
+            
+            alertBox.style.display = 'block';
+            
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+        
+        // ===== FORM VALIDATION =====
+        function validateForm() {
+            let isValid = true;
+            
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+            document.querySelectorAll('.form-control').forEach(el => {
+                el.classList.remove('error', 'success');
+            });
+            
+            // First Name
+            const firstName = document.getElementById('firstName').value.trim();
+            if (firstName.length < 2) {
+                document.getElementById('firstNameError').classList.add('show');
+                document.getElementById('firstName').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('firstName').classList.add('success');
+            }
+            
+            // Last Name
+            const lastName = document.getElementById('lastName').value.trim();
+            if (lastName.length < 2) {
+                document.getElementById('lastNameError').classList.add('show');
+                document.getElementById('lastName').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('lastName').classList.add('success');
+            }
+            
+            // Email
+            const email = document.getElementById('email').value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').classList.add('show');
+                document.getElementById('email').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('email').classList.add('success');
+            }
+            
+            // Password
+            const password = document.getElementById('password').value;
+            if (password.length < 8) {
+                document.getElementById('passwordError').classList.add('show');
+                document.getElementById('password').classList.add('error');
+                isValid = false;
+            } else {
+                document.getElementById('password').classList.add('success');
+            }
+            
+            // Confirm Password
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (confirmPassword !== password) {
+                document.getElementById('confirmPasswordError').classList.add('show');
+                document.getElementById('confirmPassword').classList.add('error');
+                isValid = false;
+            } else if (confirmPassword) {
+                document.getElementById('confirmPassword').classList.add('success');
+            }
+            
+            // Skills
+            const teachSkill = document.getElementById('teachSkill').value.trim();
+            const learnSkill = document.getElementById('learnSkill').value.trim();
+            if (!teachSkill) {
+                showAlert('error', 'Please specify at least one skill you can teach.');
+                isValid = false;
+            }
+            if (!learnSkill) {
+                showAlert('error', 'Please specify at least one skill you want to learn.');
+                isValid = false;
+            }
+            
+            // Terms
+            if (!document.getElementById('terms').checked) {
+                showAlert('error', 'Please accept the Terms of Service and Privacy Policy.');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // ===== HANDLE SIGNUP =====
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            
+            const formData = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                password: document.getElementById('password').value,
+                teachSkill: document.getElementById('teachSkill').value.trim(),
+                learnSkill: document.getElementById('learnSkill').value.trim()
+            };
+            
+            // 🔹 BACKEND INTEGRATION POINT 🔹
+            // Replace this with actual API call:
+            /*
+            fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('success', 'Account created successfully! Redirecting...');
+                    setTimeout(() => window.location.href = 'dashboard.html', 1500);
+                } else {
+                    showAlert('error', data.message || 'Failed to create account.');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                }
+            })
+            .catch(err => {
+                showAlert('error', 'Server error. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+            });
+            */
+            
+            // 👇 DEMO MODE (Remove when backend is ready) 👇
+            setTimeout(() => {
+                // Store user data in localStorage for demo
+                const userData = {
+                    name: `${formData.firstName} ${formData.lastName}`,
+                    email: formData.email,
+                    teach: formData.teachSkill,
+                    learn: formData.learnSkill,
+                    joined: new Date().toISOString()
+                };
+                localStorage.setItem('studySwapCurrentUser', JSON.stringify(userData));
+                
+                showAlert('success', '✅ Account created successfully! (Demo Mode)');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html'; // Redirect to dashboard
+                }, 1200);
+            }, 1500);
+        }
+        
+        // ===== SOCIAL SIGNUP =====
+        function socialSignup(provider) {
+            showAlert('success', `🔗 Connecting to ${provider}...`);
+            // Demo: Simulate social signup
+            setTimeout(() => {
+                // Create mock user data for demo
+                const userData = {
+                    name: `${provider} User`,
+                    email: `user@${provider.toLowerCase()}.com`,
+                    teach: 'JavaScript, Python',
+                    learn: 'React, Node.js',
+                    joined: new Date().toISOString()
+                };
+                localStorage.setItem('studySwapCurrentUser', JSON.stringify(userData));
+                
+                showAlert('success', `✅ Connected to ${provider}! Account created.`);
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1200);
+            }, 1500);
+        }
+        
+        // ===== AUTO-FOCUS =====
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('firstName').focus();
+        });
+    </script>
+</body>
+</html>

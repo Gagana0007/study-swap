@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Find Partners | Study Swap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee; --primary-dark: #3a56d4; --secondary: #7209b7;
+            --light: #f8f9fa; --dark: #212529; --gray: #6c757d;
+            --success: #28a745; --warning: #ffc107; --error: #dc3545;
+            --shadow: 0 8px 24px rgba(0,0,0,0.1); --radius: 14px; --transition: all 0.3s ease;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:#f4f7fb; color:var(--dark); line-height:1.6; min-height:100vh; }
+        
+        /* Header */
+        header { background:white; padding:15px 30px; box-shadow:var(--shadow); position:sticky; top:0; z-index:100; }
+        .nav-container { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+        .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+        .logo i { font-size:1.6rem; color:var(--primary); } .logo span { font-size:1.4rem; font-weight:700; color:var(--primary); }
+        .nav-links { display:flex; gap:20px; align-items:center; }
+        .nav-links a { text-decoration:none; color:var(--gray); font-weight:500; transition:var(--transition); }
+        .nav-links a:hover, .nav-links a.active { color:var(--primary); }
+        .btn-nav { padding:8px 16px; background:var(--primary); color:white; border-radius:8px; text-decoration:none; font-weight:500; transition:var(--transition); }
+        .btn-nav:hover { background:var(--primary-dark); }
+
+        /* Layout */
+        .matches-container { max-width:1200px; margin:30px auto; padding:0 20px; }
+        .demo-banner { background:var(--warning); color:#333; text-align:center; padding:8px; font-size:0.85rem; font-weight:500; margin-bottom:20px; border-radius:8px; }
+        .page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:15px; }
+        .page-header h1 { font-size:1.8rem; }
+        
+        /* Filters */
+        .filters-bar { background:white; padding:20px; border-radius:var(--radius); box-shadow:var(--shadow); margin-bottom:20px; display:flex; flex-wrap:wrap; gap:15px; align-items:center; }
+        .filter-group { flex:1; min-width:200px; }
+        .filter-group label { display:block; margin-bottom:6px; font-size:0.85rem; font-weight:500; color:var(--gray); }
+        .form-control { width:100%; padding:10px 12px; border:2px solid #e1e5e9; border-radius:8px; font-size:0.95rem; transition:var(--transition); }
+        .form-control:focus { outline:none; border-color:var(--primary); }
+        .btn-filter { padding:10px 20px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer; font-weight:500; transition:var(--transition); margin-top:22px; }
+        .btn-filter:hover { background:var(--primary-dark); }
+        
+        /* Controls */
+        .controls { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
+        .results-count { font-size:0.95rem; color:var(--gray); }
+        .view-toggle { display:flex; background:white; border-radius:8px; overflow:hidden; box-shadow:var(--shadow); }
+        .view-btn { padding:10px 15px; background:transparent; border:none; cursor:pointer; color:var(--gray); transition:var(--transition); }
+        .view-btn.active { background:var(--primary); color:white; }
+        
+        /* Grid/List */
+        .matches-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px; }
+        .matches-list { display:flex; flex-direction:column; gap:15px; }
+        .matches-list .match-card { display:flex; align-items:center; padding:20px; }
+        .matches-list .match-avatar { margin:0 20px 0 0; width:60px; height:60px; }
+        .matches-list .match-info { flex:1; }
+        .matches-list .match-actions { margin-top:0; margin-left:20px; }
+        
+        .match-card { background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:25px; transition:var(--transition); position:relative; }
+        .match-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.12); }
+        .match-card.verified::after { content:'✓'; position:absolute; top:15px; right:15px; background:var(--success); color:white; width:22px; height:22px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:bold; }
+        
+        .match-avatar { width:50px; height:50px; background:linear-gradient(135deg,var(--primary),var(--secondary)); border-radius:50%; color:white; display:flex; align-items:center; justify-content:center; font-weight:600; margin-bottom:15px; }
+        .match-info { margin-bottom:15px; }
+        .match-name { font-size:1.2rem; font-weight:600; margin-bottom:5px; }
+        .match-skills { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0; }
+        .skill-pill { padding:4px 10px; border-radius:15px; font-size:0.8rem; font-weight:500; }
+        .skill-teach { background:#e6f4ea; color:var(--success); }
+        .skill-learn { background:#e0e7ff; color:var(--primary); }
+        .match-stats { display:flex; justify-content:space-between; align-items:center; color:var(--gray); font-size:0.85rem; margin-bottom:15px; }
+        .match-score { color:var(--warning); font-weight:600; }
+        
+        .match-actions { display:flex; gap:10px; }
+        .btn { padding:10px 16px; border-radius:8px; font-weight:500; cursor:pointer; border:none; transition:var(--transition); font-size:0.9rem; }
+        .btn-outline { border:2px solid var(--gray); background:transparent; color:var(--dark); }
+        .btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+        .btn-primary { background:var(--primary); color:white; }
+        .btn-primary:hover { background:var(--primary-dark); }
+        .btn-success { background:var(--success); color:white; }
+        .btn-success:hover { background:#218838; }
+        
+        .load-more { text-align:center; margin:30px 0; }
+        .btn-load { padding:12px 30px; background:white; border:2px solid var(--primary); color:var(--primary); border-radius:50px; cursor:pointer; font-weight:500; transition:var(--transition); }
+        .btn-load:hover { background:var(--primary); color:white; }
+        
+        .toast { position:fixed; bottom:30px; right:30px; padding:15px 20px; background:var(--success); color:white; border-radius:10px; box-shadow:var(--shadow); display:none; z-index:200; }
+        .toast.show { display:block; animation:fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        
+        footer { text-align:center; padding:30px 20px; color:var(--gray); font-size:0.9rem; margin-top:40px; }
+        footer strong { color:var(--dark); }
+        
+        @media (max-width:768px) {
+            .nav-links { display:none; }
+            .page-header { flex-direction:column; align-items:flex-start; }
+            .matches-grid { grid-template-columns:1fr; }
+            .matches-list .match-card { flex-direction:column; text-align:center; }
+            .matches-list .match-avatar { margin:0 auto 15px; }
+            .matches-list .match-actions { margin:15px 0 0; width:100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><i class="fas fa-exchange-alt"></i><span>Study Swap</span></a>
+            <div class="nav-links">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="profile.html">Profile</a>
+                <a href="matches.html" class="active">Find Partners</a>
+                <a href="signin.html" class="btn-nav">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="demo-banner" id="demoBanner">🔹 Demo Mode Active • Filter & Request features work locally</div>
+
+    <main class="matches-container">
+        <div class="page-header">
+            <h1>🔍 Find Your Perfect Swap Partner</h1>
+            <span class="results-count" id="resultsCount">Showing 6 partners</span>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label><i class="fas fa-search"></i> Search Skill</label>
+                <input type="text" class="form-control" id="skillSearch" placeholder="e.g., React, Python, UI/UX">
+            </div>
+            <div class="filter-group">
+                <label><i class="fas fa-star"></i> Min Rating</label>
+                <select class="form-control" id="ratingFilter">
+                    <option value="0">All Ratings</option>
+                    <option value="3">3+ Stars</option>
+                    <option value="4">4+ Stars</option>
+                    <option value="4.5">4.5+ Stars</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label><i class="fas fa-sort"></i> Sort By</label>
+                <select class="form-control" id="sortFilter">
+                    <option value="match">Best Match</option>
+                    <option value="rating">Highest Rated</option>
+                    <option value="sessions">Most Sessions</option>
+                </select>
+            </div>
+            <button class="btn-filter" onclick="applyFilters()"><i class="fas fa-filter"></i> Apply</button>
+        </div>
+
+        <!-- View Controls -->
+        <div class="controls">
+            <span class="results-count" id="viewInfo">Grid View • 6 Results</span>
+            <div class="view-toggle">
+                <button class="view-btn active" data-view="grid" onclick="toggleView('grid')"><i class="fas fa-th-large"></i></button>
+                <button class="view-btn" data-view="list" onclick="toggleView('list')"><i class="fas fa-list"></i></button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div id="matchesGrid" class="matches-grid"></div>
+
+        <div class="load-more">
+            <button class="btn-load" onclick="showToast('🔍 Loading more partners...')"><i class="fas fa-sync-alt"></i> Load More</button>
+        </div>
+    </main>
+
+    <div class="toast" id="toast">✅ Request sent successfully!</div>
+    <footer>
+        <p>&copy; 2026 <strong>Study Swap</strong>. Built with ❤️ by <strong>GAGANA A S</strong>, <strong>ANKITHA P N</strong> & <strong>JAHNAVI C D</strong></p>
+    </footer>
+
+    <script>
+        // ✅ MOCK DATA
+        const mockUsers = [
+            { id: 1, name: "Alex K", teach: "React, JavaScript", learn: "Node.js, MongoDB", rating: 4.8, sessions: 12, score: 96, verified: true },
+            { id: 2, name: "Priya M", teach: "Python, Data Science", learn: "UI/UX, Figma", rating: 4.5, sessions: 8, score: 88, verified: true },
+            { id: 3, name: "Sam T", teach: "UI/UX, Figma", learn: "React, Git", rating: 4.9, sessions: 15, score: 85, verified: true },
+            { id: 4, name: "Jordan L", teach: "Node.js, Express", learn: "Python, AWS", rating: 4.2, sessions: 6, score: 82, verified: false },
+            { id: 5, name: "Taylor R", teach: "TypeScript, Angular", learn: "Vue.js, Svelte", rating: 4.7, sessions: 10, score: 79, verified: true },
+            { id: 6, name: "Casey N", teach: "DevOps, Docker", learn: "React, GraphQL", rating: 4.0, sessions: 4, score: 75, verified: false }
+        ];
+
+        let currentView = 'grid';
+        let filteredUsers = [...mockUsers];
+
+        // Render Function with Error Handling
+        function renderMatches() {
+            try {
+                const container = document.getElementById('matchesGrid');
+                if (!container) return setTimeout(renderMatches, 100);
+                
+                container.className = currentView === 'grid' ? 'matches-grid' : 'matches-list';
+                
+                const resultsCount = document.getElementById('resultsCount');
+                const viewInfo = document.getElementById('viewInfo');
+                
+                if (resultsCount) resultsCount.textContent = `Showing ${filteredUsers.length} partners`;
+                if (viewInfo) viewInfo.textContent = `${currentView.charAt(0).toUpperCase() + currentView.slice(1)} View • ${filteredUsers.length} Results`;
+
+                container.innerHTML = filteredUsers.map(u => `
+                    <div class="match-card ${u.verified ? 'verified' : ''}">
+                        <div class="match-avatar">${u.name.split(' ').map(n=>n[0]).join('')}</div>
+                        <div class="match-info">
+                            <div class="match-name">${u.name} <span style="font-size:0.8rem; color:var(--gray);">(${u.sessions} sessions)</span></div>
+                            <div class="match-stats">
+                                <span>⭐ ${u.rating}/5.0</span>
+                                <span class="match-score">🎯 ${u.score}% Match</span>
+                            </div>
+                            <div class="match-skills">
+                                <span class="skill-pill skill-teach"><i class="fas fa-chalkboard-teacher"></i> ${u.teach}</span>
+                                <span class="skill-pill skill-learn"><i class="fas fa-graduation-cap"></i> ${u.learn}</span>
+                            </div>
+                        </div>
+                        <div class="match-actions">
+                            <button class="btn btn-outline" onclick="viewProfile(${u.id})"><i class="fas fa-eye"></i></button>
+                            <button class="btn btn-primary" onclick="requestSwap(${u.id})"><i class="fas fa-paper-plane"></i> Request</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) {
+                console.error('Render error:', e);
+            }
+        }
+
+        // Filter Logic
+        function applyFilters() {
+            try {
+                const skillSearch = document.getElementById('skillSearch');
+                const ratingFilter = document.getElementById('ratingFilter');
+                const sortFilter = document.getElementById('sortFilter');
+                
+                if (!skillSearch || !ratingFilter || !sortFilter) return setTimeout(applyFilters, 100);
+                
+                const skill = skillSearch.value.toLowerCase();
+                const minRating = parseFloat(ratingFilter.value);
+                const sort = sortFilter.value;
+
+                filteredUsers = mockUsers.filter(u => {
+                    const matchesSkill = !skill || u.teach.toLowerCase().includes(skill) || u.learn.toLowerCase().includes(skill);
+                    const matchesRating = u.rating >= minRating;
+                    return matchesSkill && matchesRating;
+                });
+
+                // Sorting
+                filteredUsers.sort((a, b) => {
+                    if (sort === 'match') return b.score - a.score;
+                    if (sort === 'rating') return b.rating - a.rating;
+                    if (sort === 'sessions') return b.sessions - a.sessions;
+                    return 0;
+                });
+
+                renderMatches();
+                showToast(`✅ Filtered: ${filteredUsers.length} partners found`);
+            } catch(e) {
+                console.error('Filter error:', e);
+            }
+        }
+
+        // View Toggle
+        function toggleView(view) {
+            currentView = view;
+            const buttons = document.querySelectorAll('.view-btn');
+            if (buttons.length > 0) {
+                buttons.forEach(btn => btn.classList.toggle('active', btn.dataset.view === view));
+            }
+            renderMatches();
+        }
+
+        // Actions
+        function viewProfile(id) {
+            const user = mockUsers.find(u => u.id === id);
+            if (user) {
+                showToast(`👤 Opening ${user.name}'s profile...`);
+            }
+        }
+
+        function requestSwap(id) {
+            const user = mockUsers.find(u => u.id === id);
+            if (user) {
+                showToast(`📩 Swap request sent to ${user.name}!`);
+            }
+        }
+
+        function showToast(msg) {
+            try {
+                const toast = document.getElementById('toast');
+                if (!toast) return;
+                toast.textContent = msg;
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            } catch(e) {
+                console.error('Toast error:', e);
+            }
+        }
+
+        // Initialize when DOM is ready
+        function initPage() {
+            try {
+                renderMatches();
+                
+                const skillSearch = document.getElementById('skillSearch');
+                if (skillSearch) {
+                    skillSearch.addEventListener('input', () => setTimeout(applyFilters, 300));
+                }
+            } catch(e) {
+                console.error('Init error:', e);
+            }
+        }
+
+        // Handle both early and late script execution
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPage);
+        } else {
+            initPage();
+        }
+    </script>
+</body>
+</html>

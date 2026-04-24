@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dashboard | Study Swap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee; --secondary: #7209b7; --light: #f8f9fa; --dark: #212529;
+            --gray: #6c757d; --success: #28a745; --warning: #ffc107; --error: #dc3545;
+            --shadow: 0 8px 24px rgba(0,0,0,0.1); --radius: 14px; --transition: all 0.3s ease;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Poppins',sans-serif; background:#f4f7fb; color:var(--dark); line-height:1.6; min-height:100vh; }
+        header { background:white; padding:15px 30px; box-shadow:var(--shadow); position:sticky; top:0; z-index:100; }
+        .nav-container { max-width:1400px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+        .logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+        .logo i { font-size:1.6rem; color:var(--primary); } .logo span { font-size:1.4rem; font-weight:700; color:var(--primary); }
+        .user-menu { display:flex; align-items:center; gap:20px; }
+        .notification-btn { background:none; border:none; font-size:1.2rem; color:var(--gray); cursor:pointer; position:relative; }
+        .notification-badge { position:absolute; top:-5px; right:-5px; background:var(--error); color:white; font-size:0.7rem; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+        .user-profile { display:flex; align-items:center; gap:10px; cursor:pointer; }
+        .avatar { width:40px; height:40px; background:linear-gradient(135deg,var(--primary),var(--secondary)); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:600; }
+        .user-info { line-height:1.2; } .user-name { font-weight:500; font-size:0.95rem; } .user-role { font-size:0.8rem; color:var(--gray); }
+        .logout-btn { background:transparent; border:2px solid var(--error); color:var(--error); padding:8px 16px; border-radius:8px; font-weight:500; cursor:pointer; transition:var(--transition); }
+        .logout-btn:hover { background:var(--error); color:white; }
+        .dashboard-container { max-width:1400px; margin:30px auto; padding:0 30px; display:grid; grid-template-columns:280px 1fr; gap:30px; }
+        @media(max-width:900px) { .dashboard-container { grid-template-columns:1fr; } .sidebar { display:none; } }
+        .sidebar { background:white; border-radius:var(--radius); padding:25px; box-shadow:var(--shadow); height:fit-content; position:sticky; top:90px; }
+        .sidebar h3 { font-size:1.1rem; margin-bottom:20px; color:var(--dark); display:flex; align-items:center; gap:8px; }
+        .skill-pill { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--light); border-radius:8px; margin-bottom:10px; font-size:0.9rem; }
+        .skill-pill.teach { border-left:4px solid var(--success); } .skill-pill.learn { border-left:4px solid var(--primary); } .skill-pill i { color:var(--gray); }
+        .sidebar-footer { margin-top:30px; padding-top:20px; border-top:1px solid #eee; font-size:0.85rem; color:var(--gray); }
+        .main-content { display:flex; flex-direction:column; gap:30px; }
+        .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:20px; }
+        .stat-card { background:white; padding:20px; border-radius:var(--radius); box-shadow:var(--shadow); display:flex; align-items:center; gap:15px; }
+        .stat-icon { width:50px; height:50px; background:linear-gradient(135deg,var(--primary),var(--secondary)); border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.4rem; }
+        .stat-info h4 { font-size:0.9rem; color:var(--gray); margin-bottom:4px; } .stat-info p { font-size:1.5rem; font-weight:600; }
+        .section-card { background:white; padding:25px; border-radius:var(--radius); box-shadow:var(--shadow); }
+        .section-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .section-header h2 { font-size:1.3rem; display:flex; align-items:center; gap:10px; }
+        .btn-sm { padding:8px 14px; border-radius:8px; font-size:0.85rem; font-weight:500; cursor:pointer; border:none; transition:var(--transition); }
+        .btn-primary { background:var(--primary); color:white; } .btn-primary:hover { background:var(--primary-dark); }
+        .btn-outline { border:2px solid var(--gray); background:transparent; color:var(--dark); } .btn-outline:hover { border-color:var(--primary); color:var(--primary); }
+        .matches-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:20px; }
+        .match-card { border:2px solid #eee; border-radius:12px; padding:20px; transition:var(--transition); }
+        .match-card:hover { border-color:var(--primary); transform:translateY(-3px); box-shadow:var(--shadow); }
+        .match-avatar { width:45px; height:45px; background:#e2e8f0; border-radius:50%; margin-bottom:12px; display:flex; align-items:center; justify-content:center; font-weight:600; color:var(--gray); }
+        .match-name { font-weight:600; margin-bottom:6px; } .match-skills { font-size:0.85rem; color:var(--gray); margin-bottom:12px; } .match-skills strong { color:var(--dark); }
+        .match-actions { display:flex; gap:10px; margin-top:10px; } .match-actions button { flex:1; }
+        .btn-success { background:var(--success); color:white; border:none; } .btn-success:hover { background:#218838; }
+        .session-list { display:flex; flex-direction:column; gap:12px; } .session-item { display:flex; align-items:center; justify-content:space-between; padding:15px; background:var(--light); border-radius:10px; }
+        .session-time { font-weight:500; color:var(--primary); } .session-details { flex:1; margin-left:15px; } .session-title { font-weight:500; } .session-partner { font-size:0.85rem; color:var(--gray); }
+        .progress-item { margin-bottom:15px; } .progress-header { display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.9rem; }
+        .progress-bar { height:8px; background:#e2e8f0; border-radius:4px; overflow:hidden; }
+        .progress-fill { height:100%; background:linear-gradient(90deg,var(--primary),var(--secondary)); border-radius:4px; transition:width 0.6s ease; }
+        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:200; align-items:center; justify-content:center; }
+        .modal.active { display:flex; } .modal-content { background:white; padding:30px; border-radius:var(--radius); width:90%; max-width:450px; animation:slideUp 0.3s ease; }
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        .modal-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+        .close-modal { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--gray); }
+        .modal-form .form-group { margin-bottom:15px; } .modal-form label { display:block; margin-bottom:6px; font-weight:500; font-size:0.9rem; }
+        .modal-form input, .modal-form select { width:100%; padding:12px; border:2px solid #e1e5e9; border-radius:8px; font-size:0.95rem; }
+        footer { text-align:center; padding:30px 20px; color:var(--gray); font-size:0.9rem; margin-top:40px; } footer strong { color:var(--dark); }
+        .toast { position:fixed; bottom:30px; right:30px; padding:15px 20px; background:var(--success); color:white; border-radius:10px; box-shadow:var(--shadow); display:none; }
+        .toast.show { display:block; animation:fadeIn 0.3s ease; } @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+        .demo-banner { background:var(--warning); color:#333; text-align:center; padding:8px; font-size:0.85rem; font-weight:500; }
+    </style>
+</head>
+<body>
+    <div class="demo-banner" id="demoBanner">🔹 Demo Mode Active • Works without login</div>
+    <header>
+        <div class="nav-container">
+            <a href="index.html" class="logo"><i class="fas fa-exchange-alt"></i><span>Study Swap</span></a>
+            <div class="user-menu">
+                <button class="notification-btn"><i class="fas fa-bell"></i><span class="notification-badge">3</span></button>
+                <div class="user-profile" onclick="goToProfile()" style="cursor:pointer;" title="View Profile">
+                    <div class="avatar" id="userAvatar">GS</div>
+                    <div class="user-info">
+                        <div class="user-name" id="userName">Loading...</div>
+                        <div class="user-role">Learner & Mentor</div>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <h3><i class="fas fa-user-circle"></i> Your Profile</h3>
+            <div id="skillSidebar"></div>
+            <div class="sidebar-footer"><p><i class="fas fa-shield-alt"></i> Account Verified</p><p style="margin-top:8px;"><i class="fas fa-calendar"></i> Member since 2026</p></div>
+        </aside>
+
+        <main class="main-content">
+            <div class="stats-grid">
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-handshake"></i></div><div class="stat-info"><h4>Active Swaps</h4><p id="stat-swaps">2</p></div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-clock"></i></div><div class="stat-info"><h4>Hours Learned</h4><p id="stat-hours">14.5</p></div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-star"></i></div><div class="stat-info"><h4>Avg Rating</h4><p id="stat-rating">4.8/5</p></div></div>
+                <div class="stat-card"><div class="stat-icon"><i class="fas fa-trophy"></i></div><div class="stat-info"><h4>Skill Level</h4><p>Intermediate</p></div></div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-bolt" style="color:var(--warning);"></i> 🔥 Perfect Skill Matches</h2>
+                    <button class="btn-sm btn-outline" onclick="refreshMatches()"><i class="fas fa-sync-alt"></i> Refresh</button>
+                </div>
+                <div class="matches-grid" id="matchesGrid"></div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header">
+                    <h2><i class="fas fa-calendar-alt" style="color:var(--primary);"></i> 📅 Upcoming Sessions</h2>
+                    <button class="btn-sm btn-primary" onclick="openScheduleModal()"><i class="fas fa-plus"></i> Schedule</button>
+                </div>
+                <div class="session-list" id="sessionList"></div>
+            </div>
+
+            <div class="section-card">
+                <div class="section-header"><h2><i class="fas fa-chart-line" style="color:var(--success);"></i> 📈 Learning Progress</h2></div>
+                <div id="progressBars"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="scheduleModal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Schedule Session</h3><button class="close-modal" onclick="closeScheduleModal()"><i class="fas fa-times"></i></button></div>
+            <form class="modal-form" onsubmit="handleSchedule(event)">
+                <div class="form-group"><label>Partner</label><select id="schedulePartner"><option>Select partner...</option></select></div>
+                <div class="form-group"><label>Date & Time</label><input type="datetime-local" required></div>
+                <div class="form-group"><label>Topic</label><input type="text" placeholder="e.g., React Hooks Deep Dive" required></div>
+                <button type="submit" class="btn-sm btn-primary" style="width:100%; padding:12px;"><i class="fas fa-calendar-check"></i> Confirm Session</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✅ Action successful!</div>
+    <footer><p>&copy; 2026 <strong>Study Swap</strong>. Built with ❤️ by <strong>GAGANA A S</strong>, <strong>ANKITHA P N</strong> & <strong>JAHNAVI C D</strong></p></footer>
+
+    <script>
+        // ✅ DEMO MODE - Always loads with sample data
+        const currentUser = { name: "Gagana A S", email: "gagana@studyswap.demo", teach: "JavaScript, React", learn: "Node.js, UI/UX" };
+
+        function renderDashboard() {
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userAvatar').textContent = currentUser.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+
+            const teach = currentUser.teach.split(',').map(s=>s.trim());
+            const learn = currentUser.learn.split(',').map(s=>s.trim());
+            
+            let side = '<p style="margin-bottom:12px;font-weight:500;">🎓 Teaching</p>';
+            teach.forEach(s => side += `<div class="skill-pill teach"><span>${s}</span><i class="fas fa-check-circle"></i></div>`);
+            side += '<p style="margin:16px 0 12px;font-weight:500;">📖 Learning</p>';
+            learn.forEach(s => side += `<div class="skill-pill learn"><span>${s}</span><i class="fas fa-spinner"></i></div>`);
+            document.getElementById('skillSidebar').innerHTML = side;
+
+            const mockMatches = [
+                { name:'Alex K', teach:learn[0], learn:teach[0], avatar:'AK', score:95 },
+                { name:'Priya M', teach:'Node.js', learn:'Python', avatar:'PM', score:88 },
+                { name:'Sam T', teach:'UI/UX', learn:teach[0], avatar:'ST', score:82 }
+            ];
+            document.getElementById('matchesGrid').innerHTML = mockMatches.map(m => `
+                <div class="match-card">
+                    <div class="match-avatar">${m.avatar}</div>
+                    <div class="match-name">${m.name}</div>
+                    <div class="match-skills"><strong>Teaches:</strong> ${m.teach}<br><strong>Wants:</strong> ${m.learn}<br><span style="color:var(--success)">🎯 ${m.score}% Match</span></div>
+                    <div class="match-actions">
+                        <button class="btn-sm btn-outline" onclick="showToast('👤 View ${m.name}')">View</button>
+                        <button class="btn-sm btn-primary" onclick="showToast('📩 Request sent to ${m.name}')">Request Swap</button>
+                    </div>
+                </div>`).join('');
+
+            document.getElementById('schedulePartner').innerHTML = '<option>Select partner...</option>' + 
+                mockMatches.map(m => `<option value="${m.name}">${m.name} (${m.teach})</option>`).join('');
+
+            document.getElementById('sessionList').innerHTML = `
+                <div class="session-item"><div class="session-time">Tomorrow, 4:00 PM</div><div class="session-details"><div class="session-title">React State Management</div><div class="session-partner">with Alex K • Video Call</div></div><button class="btn-sm btn-outline"><i class="fas fa-video"></i> Join</button></div>
+                <div class="session-item"><div class="session-time">Fri, 10:00 AM</div><div class="session-details"><div class="session-title">Node.js Basics</div><div class="session-partner">with Priya M • Screen Share</div></div><button class="btn-sm btn-outline"><i class="fas fa-video"></i> Join</button></div>`;
+
+            const prog = [{s:learn[0],p:65},{s:'Git',p:45},{s:'API Integration',p:30}];
+            document.getElementById('progressBars').innerHTML = prog.map(p => `
+                <div class="progress-item"><div class="progress-header"><span>${p.s}</span><span>${p.p}%</span></div><div class="progress-bar"><div class="progress-fill" style="width:${p.p}%"></div></div></div>`).join('');
+        }
+
+        function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+        function refreshMatches() { showToast('🔄 Matches updated!'); }
+        function openScheduleModal() { document.getElementById('scheduleModal').classList.add('active'); }
+        function closeScheduleModal() { document.getElementById('scheduleModal').classList.remove('active'); }
+        function handleSchedule(e) { e.preventDefault(); closeScheduleModal(); showToast('📅 Session scheduled!'); }
+        
+        function goToProfile() {
+            showToast('📄 Opening your profile...');
+            setTimeout(() => {
+                window.location.href = 'profile.html';
+            }, 300);
+        }
+        
+        function handleLogout() { showToast('👋 Logged out!'); setTimeout(() => window.location.href='index.html', 1000); }
+
+        document.addEventListener('DOMContentLoaded', renderDashboard);
+    </script>
+</body>
+</html>
